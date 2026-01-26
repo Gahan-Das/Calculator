@@ -1,5 +1,7 @@
 from tkinter import *
 import customtkinter as ctk
+import multiprocessing as mp
+import sympy as sp
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -33,7 +35,7 @@ global flag
 global operators
 current_expression = "0"
 flag = 0
-operators = ['/', '*', '-', '+', '^']
+operators = ['÷', '×', '-', '+', '^']
 
 def key_press(event):
     key = event.char
@@ -44,7 +46,11 @@ def key_press(event):
         clear()
     elif keysym == "BackSpace":
         backspace()
-    elif key in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '+', '-', '*', '/', '.', '^']:
+    elif key == '*':
+        add_to_expression('×')
+    elif key == '/':
+        add_to_expression('÷')
+    elif key in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '+', '-', '*', '/', '.', '^', '(', ')','e']:
         add_to_expression(key)
 
 root.bind('<Key>', key_press)
@@ -103,6 +109,12 @@ def calculate():
                 current_expression = "2.71828"
         if  '^' in current_expression:
             current_expression = current_expression.replace('^', '**')
+        if  '÷' in current_expression:
+            current_expression = current_expression.replace('÷', '/')
+        if  '×' in current_expression:
+            current_expression = current_expression.replace('×', '*')
+        #
+       
         answer = eval(current_expression)
         if (answer - int(answer)) != 0:
             pass
@@ -114,6 +126,7 @@ def calculate():
         current_expression = "Error"
         flag = 1
     update_result()
+
 
 
 def clear():
@@ -129,6 +142,8 @@ def backspace():
         flag = 0
     else:
         current_expression = current_expression[:-1]
+    if current_expression == "":
+        current_expression = "0"
     update_result()
 
 def add_to_expression(key):
@@ -189,15 +204,15 @@ button_power = ctk.CTkButton(button_frame, text = "^", height = 60, width = 60, 
 left_parenthesis = ctk.CTkButton(button_frame, text = "(", height = 60, width = 60, font = ("Arial", 24), command=lambda x="(":button_click(x), fg_color=accent_color, hover_color=accent_hover_color, text_color="black")
 right_parenthesis = ctk.CTkButton(button_frame, text = ")", height = 60, width = 60, font = ("Arial", 24), command=lambda x=")":button_click(x), fg_color=accent_color, hover_color=accent_hover_color, text_color="black")
 
-divide = ctk.CTkButton(button_frame, text = "/", height = 60, width = 60, font = ("Arial", 24), command=lambda x="/":button_click(x), fg_color=accent_color, hover_color=accent_hover_color, text_color="black")
-multiply = ctk.CTkButton(button_frame, text = "*", height = 60, width = 60, font = ("Arial", 24), command=lambda x="*":button_click(x), fg_color=accent_color, hover_color=accent_hover_color, text_color="black")
+divide = ctk.CTkButton(button_frame, text = "÷", height = 60, width = 60, font = ("Arial", 24), command=lambda x="÷":button_click(x), fg_color=accent_color, hover_color=accent_hover_color, text_color="black")
+multiply = ctk.CTkButton(button_frame, text = "×", height = 60, width = 60, font = ("Arial", 24), command=lambda x="×":button_click(x), fg_color=accent_color, hover_color=accent_hover_color, text_color="black")
 substract = ctk.CTkButton(button_frame, text = "-", height = 60, width = 60, font = ("Arial", 24), command=lambda x="-":button_click(x), fg_color=accent_color, hover_color=accent_hover_color, text_color="black")
 add = ctk.CTkButton(button_frame, text = "+", height = 60, width = 60, font = ("Arial", 24), command=lambda x="+":button_click(x), fg_color=accent_color, hover_color=accent_hover_color, text_color="black")
 
 button_pi = ctk.CTkButton(button_frame, text = "\u03C0", height = 60, width = 60, font = ("Arial", 24), command=lambda x="\u03C0":button_click(x), fg_color=accent_color, hover_color=accent_hover_color, text_color="black")
 button_e = ctk.CTkButton(button_frame, text = "e", height = 60, width = 60, font = ("Arial", 24), command=lambda x="e":button_click(x), fg_color=accent_color, hover_color=accent_hover_color, text_color="black")
 button_clear = ctk.CTkButton(button_frame, text = "C", height = 60, width = 60, font = ("Arial", 24), command=lambda x="C":button_click(x), fg_color=accent_color, hover_color=accent_hover_color, text_color="black")
-button_backspace = ctk.CTkButton(button_frame, text = "⬅️", height = 60, width = 60, font = ("Arial", 24), command=lambda x="⬅️":button_click(x), fg_color=accent_color, hover_color=accent_hover_color, text_color="black")
+button_backspace = ctk.CTkButton(button_frame, text = "←", height = 60, width = 60, font = ("Arial", 24), command=lambda x="⬅️":button_click(x), fg_color=accent_color, hover_color=accent_hover_color, text_color="black")
 
 
 
